@@ -29,7 +29,7 @@ spec:
                       name: nginx-config
                 - name: pod-localtime               
                   hostPath:
-		path: /etc/localtime
+		      path: /etc/localtime
                 - name: php-www
                   nfs:
                       server: 172.31.9.164
