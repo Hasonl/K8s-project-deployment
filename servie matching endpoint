@@ -1,0 +1,84 @@
+
+Attention Please:
+                 So many times, data service are not deploymen in K8s Cluster, But container service need to connect
+                 outside  database service, How to achieve it ?
+                 
+
+
+We can use service matching endpoint , such as:
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-service
+  namespace: lnmp
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: mysql-service
+  namespace: lnmp
+subsets:
+  - addresses:
+      - ip: 172.28.1.200
+    ports:
+      - port: 3306
+
+
+
+
+If the database is a cluster, not a single point,How to achieve it ?
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql1-exserver
+  namespace: lnmp
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: mysql1-exserver
+  namespace: lnmp
+subsets:
+  - addresses:
+      - ip: 172.28.0.224
+    ports:
+      - port: 3306	  
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql2-exserver
+  namespace: lnmp
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: mysql2-exserver
+  namespace: lnmp
+subsets:
+  - addresses:
+      - ip: 172.28.1.142
+    ports:
+      - port: 3306	  
+---
