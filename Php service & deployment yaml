@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    name: php-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: php
+    template:
+        metadata:
+            labels:
+                app: php
+        spec:
+            containers:
+                - name: php
+                  image: hason.docker.com/lnmp/php7.2.4:latest
+                  volumeMounts:
+                      - name: web-root
+                        mountPath: /k8s/data/php
+            volumes:
+                - name: web-root
+                  nfs:
+                      server: 172.31.9.164
+                      path: /k8s/data/php
+
+
+配置Service
+
+					  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-service
+  namespace: lnmp
+  labels:
+    app: php
+spec:
+  ports:
+  - port: 9000
+  selector:
+    app: php
