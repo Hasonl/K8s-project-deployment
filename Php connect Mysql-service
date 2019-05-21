@@ -43,7 +43,7 @@ subsets:
 [root@php-deployment-69d7f64d84-c7bxp php]# cat /k8s/data/php/b.php 
 <?php
 $dbms='mysql';
-$host='mysql-service';  # connect mysql host
+$host='mysql-service';  # Connect k8s cluster interior mysql Service.
 $dbName='mysql';
 $user='root';
 $pass='Asonger1994';
