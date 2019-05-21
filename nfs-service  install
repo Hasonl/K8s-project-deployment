@@ -1,0 +1,22 @@
+
+harbor服务器安装部署nfs Server端（生产环境可考虑nfs集群或oss存储）
+
+
+yum install nfs-utils
+
+mkdir -p  /k8s/data/{nginx,php}
+
+vim /etc/exportfs
+/k8s/data/ 172.31.9.0/24(sync,rw,no_root_squash)
+systemctl start nfs
+systemctl enable nfs
+
+
+k8s 集群所有node节点配置如下所述：
+
+yum install nfs-utils -y
+
+mkdir -p /k8s/data
+
+mount -t nfs 172.31.9.164:/k8s/data /k8s/data
+
