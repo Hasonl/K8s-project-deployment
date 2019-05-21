@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    name: nginx-deployment
+    namespace: lnmp
+spec:
+    selector:
+        matchLabels:
+            app: nginx
+    template:
+        metadata:
+            labels:
+                app: nginx
+        spec:
+            containers:
+                - name: nginx
+                  image: hason.docker.com/lnmp/nginx:latest
+                  volumeMounts:
+                      - name: nginx-config
+                        mountPath: /usr/local/nginx/conf/vhost
+                      - name: php-www
+                        mountPath: /k8s/data/
+                      - name: pod-localtime         #把物理机的时区文件用hostpath方式只读挂载
+                        mountPath: /etc/localtime
+                        readOnly: true
+            volumes:
+                - name: nginx-config
+                  configMap:
+                      name: nginx-config
+                - name: pod-localtime               
+                  hostPath:
+				            path: /etc/localtime
+                - name: php-www
+                  nfs:
+                      server: 172.31.9.164
+                      path: /k8s/data/
